@@ -7,10 +7,12 @@ from typing import Union
 from collections.abc import Callable, Awaitable
 import asyncio
 from pathlib import PurePath, Path
+import aiofiles
 import cv2
 from wand.image import Image
 from wand.color import Color
 import numpy as np
+from navconfig import BASE_DIR
 from navconfig.logging import logging
 
 class ImageProcessor:
@@ -26,7 +28,8 @@ class ImageProcessor:
     def __init__(
         self,
         image: Union[str, PurePath],
-        destination_image: Union[str, PurePath]
+        destination_image: Union[str, PurePath],
+        logdir: Union[None, PurePath] = None
     ) -> None:
         self.logger = logging.getLogger(
             "CNE.ImageProcessor"
@@ -38,6 +41,28 @@ class ImageProcessor:
         self._destination = destination_image
         if isinstance(self._destination, str):
             self._destination = Path(self._destination)
+        self._logdir = logdir
+        if logdir is None:
+            self._logdir = BASE_DIR.joinpath('Log')
+        if self._logdir.exists() is False:
+            self._logdir.mkdir(parents=True, exist_ok=True)
+        self._log_handler = None
+        self.log_file = self._logdir.joinpath('non_processed.log')
+
+    async def __aenter__(self):
+        self._log_handler = await aiofiles.open(self.log_file, mode='a')
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        await self._log_handler.close()
+
+    async def log_error(self, error_message):
+        """log_error.
+
+        Saving Errors on Log File.
+        """
+        await self._log_handler.write(f"{error_message}\n")
+        await self._log_handler.flush()
 
     def convert_to_grayscale(self, image):
         return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -227,7 +252,7 @@ class ImageProcessor:
 
         return image
 
-    def extract_qr(self, area: float = 0.15):
+    async def extract_qr(self, area: float = 0.15):
         # Read the image
         directory = self._destination.parent
         # open the optimized image
@@ -277,10 +302,12 @@ class ImageProcessor:
                 # Save the QR code region
                 output_path = Path(directory).joinpath(f"{self._destination.stem}_qr_code{self._destination.suffix}")
                 cv2.imwrite(output_path, qr_code_roi)
-                print(f"QR code detected and saved to {output_path}")
+                self.logger.debug(
+                    f"QR code detected and saved to {output_path}"
+                )
         else:
-            print("No QR code detected")
-
+            self.logger.warning("No QR code detected")
+            await self.log_error(str(self._destination))
         # Save the QR code region (bottom area:)
         output_path = Path(directory).joinpath(f"{self._destination.stem}_bottom{self._destination.suffix}")
         cv2.imwrite(output_path, sharpened)

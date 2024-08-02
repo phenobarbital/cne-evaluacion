@@ -15,6 +15,9 @@ logging.getLogger('matplotlib').setLevel(logging.CRITICAL)
 # configuracion de directorios:
 DIRECTORIO_ACTAS = config.get('DIRECTORIO_ACTAS')
 DIRECTORIO_ACTAS_PROCESADAS = config.get('DIRECTORIO_ACTAS_PROCESADAS')
-
+DIRECTORIO_LOG = config.get(
+    'DIRECTORIO_LOG',
+    fallback=BASE_DIR.joinpath('Log')
+)
 EXTENSION_ACTAS = config.get('EXTENSION_ACTAS')
 EXTENSION_ACTAS = EXTENSION_ACTAS.split(',')

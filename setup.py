@@ -79,7 +79,7 @@ setup(
         "caio==0.9.11",
         "Wand==0.6.13",
         "opencv-python==4.10.0.84",
-        "navconfig>=1.7.1",
+        "navconfig[default]>=1.7.1",
     ],
     tests_requires=[
         'pytest>=5.4.0'

@@ -1,0 +1,47 @@
+[build-system]
+requires = [
+    'setuptools==67.6.1',
+    'wheel==0.42.0',
+    'toml>=0.10.2'
+]
+
+build-backend = "setuptools.build_meta"
+
+[tool.flit.metadata]
+module = "cne_evaluation"
+author = "Jesus Lara Gimenez"
+author-email = "jesuslarag@gmail.com"
+home-page = "https://github.com/phenobarbital/cne-evaluacion"
+classifiers=[
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Intended Audience :: System Administrators",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python",
+  "Typing :: Typed",
+  "Environment :: Web Environment",
+  "Framework :: AsyncIO",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+]
+description-file = "README.md"
+requires-python = ">=3.9.16"
+
+[tool.pytest.ini_options]
+addopts = [
+  "--strict-config",
+  "--strict-markers",
+]
+
+filterwarnings = [
+    "error",
+    'ignore:The loop argument is deprecated since Python 3\.8, and scheduled for removal in Python 3\.10:DeprecationWarning:asyncio',
+]
+
+[tool.build]
+manylinux-x86_64 = "manylinux_2_12_x86_64"
+manylinux-aarch64 = "manylinux_2_12_aarch64"

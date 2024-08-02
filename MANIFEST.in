@@ -1,0 +1,7 @@
+include LICENSE
+include CHANGELOG.md
+include CONTRIBUTING.md
+include CONTRIBUTORS.txt
+include README.md
+graft cne_evaluation
+global-exclude *.pyc *.swp *.*~

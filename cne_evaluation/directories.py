@@ -4,6 +4,8 @@ from typing import Union
 import asyncio
 from pathlib import Path, PurePath
 from navconfig.conf import EXTENSION_ACTAS as extensions
+from navconfig.logging import logging
+
 
 class DirectoryIterator:
     """DirectoryIterator.
@@ -37,6 +39,12 @@ class DirectoryIterator:
         self.files = self.directory.rglob('*')
         self.ext = extensions
         self._current = None
+        self.logger = logging.getLogger(
+            "CNE.DirectoryIterator"
+        )
+        self.logger.notice(
+            f"Start Iteration over directory {self.directory}"
+        )
 
     def current(self) -> PurePath:
         """current.
@@ -63,6 +71,9 @@ class DirectoryIterator:
     def _next_file(self):
         for image_path in self.files:
             if image_path.is_file() and image_path.suffix.lower() in self.ext:
+                self.logger.notice(
+                    f"Extracting Image {image_path.name}"
+                )
                 relative_path = image_path.parent.relative_to(self.directory)
                 destination_path = Path(self._destination).joinpath(
                     relative_path

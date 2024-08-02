@@ -34,4 +34,8 @@ Se debe crear un archivo de configuración (.env) en un directorio llamado "env"
 mkdir -p env/ && touch env/.env
 ```
 
-Hay un archivo de configuración de ejemplo en /docs/config.
+Hay un archivo de configuración de ejemplo en /docs/config.example
+
+Importantes son:
+ * DIRECTORIO_ACTAS: Directorio donde las actas originales se han descargado.
+ * DIRECTORIO_ACTAS_PROCESADAS: directorio donde las actas procesadas se almacenarán.

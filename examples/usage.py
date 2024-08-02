@@ -8,6 +8,7 @@ from navconfig.conf import (
     EXTENSION_ACTAS,
 )
 from cne_evaluation.directories import DirectoryIterator
+from cne_evaluation.images import ImageProcessor
 
 async def process_images(directory, destination, extensions):
     """_summary_
@@ -21,7 +22,7 @@ async def process_images(directory, destination, extensions):
         # 1.- crear directorio (si no existe)
         dir_iterator.make_dir(destination_path)
         # 2.- Invocar al procesador de imágenes:
-        print(destination_path)
+        img = ImageProcessor(image_path, destination_path)
         # 3.- extraer la información del QR
 
 

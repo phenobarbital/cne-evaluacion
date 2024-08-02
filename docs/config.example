@@ -1,0 +1,10 @@
+[main]
+CONFIG_FILE=etc/cne.ini
+
+[directorios]
+DIRECTORIO_ACTAS=
+DIRECTORIO_ACTAS_PROCESADAS=
+EXTENSION_ACTAS=.jpg,.jpeg
+
+[debug]
+DEBUG=True
